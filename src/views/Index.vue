@@ -186,7 +186,7 @@ export default class Home extends Vue {
       if (chatContent) {
         chatContent.scrollTop = chatContent.scrollHeight;
       }
-    }, 100);
+    }, 250);
   };
 
   /**
