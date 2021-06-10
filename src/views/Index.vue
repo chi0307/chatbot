@@ -151,8 +151,19 @@ type UserMessage = {
 type Message = (UserMessage & { role: 'user' }) | (BotMessage & { role: 'bot' });
 
 @Options({
-  created() {
-    this.sendMessage('hello');
+  async created() {
+    await this.sendMessage('hello');
+    this.addBotMessages([
+      {
+        type: 'text',
+        text: '可以輸入以下文字，會顯示不同的回覆',
+      },
+      {
+        type: 'image',
+        imageUrl: 'example.png',
+        previewImageUrl: 'example.png',
+      },
+    ]);
   },
   components: {},
 })
@@ -233,9 +244,11 @@ export default class Home extends Vue {
    */
   public async dialog(): Promise<void> {
     const { inputText } = this;
-    this.inputText = '';
-    this.addUserMessage(inputText);
-    await this.sendMessage(inputText);
+    if (inputText) {
+      this.inputText = '';
+      this.addUserMessage(inputText);
+      await this.sendMessage(inputText);
+    }
   }
 
   /**
@@ -244,7 +257,7 @@ export default class Home extends Vue {
   public async sendMessage(inputText: string): Promise<void> {
     const { data: botMessages } = await this.axios({
       method: 'post',
-      url: `https://ab0a0fb7-30c4-4952-a7bd-5450b38af427.mock.pstmn.io/message?text=${inputText}`,
+      url: `https://54302a7f-ff69-4940-83ee-c12be80801f6.mock.pstmn.io/message?text=${inputText}`,
     });
     console.log('🚀 ~ file: index.vue ~ line 66 ~ Home ~ sendMessage ~ botMessages', botMessages);
     this.addBotMessages(botMessages);
